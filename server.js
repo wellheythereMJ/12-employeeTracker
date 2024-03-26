@@ -40,13 +40,34 @@ const mainMenu = [
     message: "What would you like to do?",
     choices: [
       "Add a department",
-      "Add an employee",
-      "Add a role",
+      // "Add an employee",
+      // "Add a role",
       "View all departments",
-      "View all roles",
-      "View all employees",
-      "Update an employee role",
+      // "View all roles",
+      // "View all employees",
+      // "Update an employee role",
       "Exit"
     ]
   }
-]
+] 
+const options = (response) => {
+  switch (response.main_menu) {
+    case 'View all departments':
+    viewDepartments();
+    break;
+    case 'Add a department':
+    addDepartment();
+    break;
+    case 'Exit':
+    mysql.end();
+    break;
+  }
+}
+
+const menuList = () => {
+  inquirer
+   .prompt(mainMenu)
+   .then((answer) => {
+    options(answers)
+   })
+}
