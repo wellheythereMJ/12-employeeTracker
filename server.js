@@ -67,7 +67,9 @@ const options = (response) => {
 const menuList = () => {
   inquirer
    .prompt(mainMenu)
-   .then((answer) => {
+   .then((answers) => {
     options(answers)
    })
 }
+
+menuList()
