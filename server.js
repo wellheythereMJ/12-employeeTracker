@@ -50,6 +50,13 @@ const mainMenu = [
     ]
   }
 ] 
+
+const viewDepartments = () => {
+  mysql.promise().query("SELECT * FROM department;")
+  .then(res=>{console.table(res[0])
+  menuList();
+  })
+}
 const options = (response) => {
   switch (response.main_menu) {
     case 'View all departments':
