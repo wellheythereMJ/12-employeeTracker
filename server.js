@@ -1,7 +1,7 @@
 const inquirer = require("inquirer");
 const mysql = require("./config/connections");
 
-const addDepartment = [{
+const addToDepartment = [{
   type: "input",
   name: "department_name",
   message: "What is the name of the new department?"
@@ -56,6 +56,17 @@ const viewDepartments = () => {
   .then(res=>{console.table(res[0])
   menuList();
   })
+}
+const addDepartment = () =>{
+  inquirer
+      .prompt(addToDepartment)
+      .then(({department_name})=>{
+          mysql.promise().query(`INSERT INTO department(department_name) VALUE ('${department_name}');`)
+          .then(res=>{
+              console.log(`Added ${department_name} to database`);
+              menuList();
+          })
+      })
 }
 const options = (response) => {
   switch (response.main_menu) {
