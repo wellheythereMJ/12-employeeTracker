@@ -104,8 +104,8 @@ const addEmployee = async() => {
   }) )
   inquirer
   .prompt(addEmployeeQuestions(employeeArr))
-  .then(({data})=>{
-    console.log(data);
+  .then(({first_name, last_name, manager_id})=>{
+    console.log(manager_id);
      mysql.promise().query(`INSERT INTO employee(first_name, last_name, manager_id) VALUE ('${first_name}', '${last_name}', ${manager_id});`)
      .then(res=>{
          console.log(`Added ${first_name} ${last_name} to database`);
