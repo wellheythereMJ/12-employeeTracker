@@ -7,7 +7,7 @@ const addToDepartment = [{
   message: "What is the name of the new department?"
 }]
 
-const addEmployeeQuestions= [
+const addEmployeeQuestions= (arr) => [
   {
   type: "input",
   name: "first_name",
@@ -17,7 +17,14 @@ const addEmployeeQuestions= [
     type: "input",
     name: "last_name",
     message: "What is the employee's last name?"
-  }
+  },
+  {
+    type: "list",
+    name: "manager_id",
+    message: "What is the employee's manager?",
+    choices: arr
+  },
+,
 ]
 
 const addRoleQuestions = (arr) => [
@@ -87,6 +94,24 @@ const viewAllEmployees = () => {
   .then(res=>{console.table(res[0])
   menuList();
   })
+}
+
+const addEmployee = async() => {
+  const employee = await mysql.promise().query("SELECT * FROM employee");
+  const employeeArr = employee[0].map((employee) => ({
+    name: `${employee.first_name} ${employee.last_name}`,
+    value: employee.id,
+  }) )
+  inquirer
+  .prompt(addEmployeeQuestions(employeeArr))
+  .then(({data})=>{
+    console.log(data);
+     mysql.promise().query(`INSERT INTO employee(first_name, last_name, manager_id) VALUE ('${first_name}', '${last_name}', ${manager_id});`)
+     .then(res=>{
+         console.log(`Added ${first_name} ${last_name} to database`);
+         menuList();
+     })
+ })
 }
 
 const addRole = async() => {
