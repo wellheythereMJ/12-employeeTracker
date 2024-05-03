@@ -71,6 +71,12 @@ const updateEmployeeRoleQuestions = (roleArr, employeeArr) => [
   },
 ]
 
+const figlet = require("figlet");
+figlet.text("Employee Tracker", function (err, data) {
+  console.log(data);
+  menuList(); // Prompt the user for the main menu after displaying the ASCII art
+});
+
 const mainMenu = [
   {
     type: "list",
@@ -223,18 +229,10 @@ const options = (response) => {
   }
 }
 
-const graphic = () => {
-  console.log(" _____                 _                       \r\n| ____|_ __ ___  _ __ | | ___  _   _  ___  ___ \r\n|  _| | \'_ ` _ \\| \'_ \\| |\/ _ \\| | | |\/ _ \\\/ _ \\\r\n| |___| | | | | | |_) | | (_) | |_| |  __\/  __\/\r\n|_____|_| |_| |_| .__\/|_|\\___\/ \\__, |\\___|\\___|\r\n                |_|            |___\/           \r\n __  __                                   \r\n|  \\\/  | __ _ _ __   __ _  __ _  ___ _ __ \r\n| |\\\/| |\/ _` | \'_ \\ \/ _` |\/ _` |\/ _ \\ \'__|\r\n| |  | | (_| | | | | (_| | (_| |  __\/ |   \r\n|_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|   \r\n                          |___\/           \r\n")
-}
-
 const menuList = () => {
-  graphic();
   inquirer
    .prompt(mainMenu)
    .then((answers) => {
     options(answers)
    })
 }
-
-
-menuList()
