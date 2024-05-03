@@ -7,7 +7,7 @@ const addToDepartment = [{
   message: "What is the name of the new department?"
 }]
 
-const addEmployeeQuestions= (arr) => [
+const addEmployeeQuestions= (roleArr, employeeArr) => [
   {
   type: "input",
   name: "first_name",
@@ -22,9 +22,14 @@ const addEmployeeQuestions= (arr) => [
     type: "list",
     name: "manager_id",
     message: "What is the employee's manager?",
-    choices: arr
+    choices: employeeArr
   },
-,
+  {
+    type: "list",
+    name: "role_id",
+    message: "What is the employee's role?",
+    choices: roleArr
+  }
 ]
 
 const addRoleQuestions = (arr) => [
@@ -44,6 +49,26 @@ const addRoleQuestions = (arr) => [
     message: "Which department does this role belong to?",
     choices: arr
   }
+]
+
+const updateEmployeeRoleQuestions = (roleArr, employeeArr) => [
+  {
+    type: "list",
+    name: "employee_id",
+    message: "Which employee would you like to update?",
+    choices: roleArr
+  },
+  {
+    type: "list",
+    name: "role_id",
+    message: "What is the employee's new role?",
+    choices: employeeArr
+  },
+  {
+    type: "confirm",
+    name: "confirm",
+    message: "Are you sure you want to update this employee's role?"
+  },
 ]
 
 const mainMenu = [
@@ -97,16 +122,21 @@ const viewAllEmployees = () => {
 }
 
 const addEmployee = async() => {
+  const role = await mysql.promise().query("SELECT * FROM role;");
+  const roleArr = role[0].map((role) => ({
+    name: role.title,
+    value: role.id,
+  }) )
   const employee = await mysql.promise().query("SELECT * FROM employee");
   const employeeArr = employee[0].map((employee) => ({
     name: `${employee.first_name} ${employee.last_name}`,
     value: employee.id,
   }) )
   inquirer
-  .prompt(addEmployeeQuestions(employeeArr))
-  .then(({first_name, last_name, manager_id})=>{
+  .prompt(addEmployeeQuestions(roleArr, employeeArr))
+  .then(({first_name, last_name, role_id, manager_id})=>{
     console.log(manager_id);
-     mysql.promise().query(`INSERT INTO employee(first_name, last_name, manager_id) VALUE ('${first_name}', '${last_name}', ${manager_id});`)
+     mysql.promise().query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUE ('${first_name}', '${last_name}', ${role_id}, ${manager_id});`)
      .then(res=>{
          console.log(`Added ${first_name} ${last_name} to database`);
          menuList();
@@ -129,6 +159,39 @@ const addRole = async() => {
             menuList();
         })
     })
+}
+
+const updateEmployeeRole = async() => {
+  const employees = await mysql.promise().query("SELECT * FROM employee;");
+  const roles = await mysql.promise().query("SELECT * FROM role;");
+  const employeeArr = employees[0].map((employee) => ({
+    name: `${employee.first_name} ${employee.last_name}`,
+    value: employee.id,
+  }));
+  const roleArr = roles[0].map((role) => ({
+    name: role.title,
+    value: role.id,
+  }));
+  inquirer
+    .prompt(updateEmployeeRoleQuestions(employeeArr, roleArr))
+    .then(({ employee_id, role_id, confirm }) => {
+      if (!confirm) {
+        console.log("Update cancelled.");
+        menuList();
+        return;
+      }
+
+      mysql.promise().query(
+        `UPDATE employee SET role_id = ${role_id} WHERE id = ${employee_id};`
+      )
+      .then((res) => {
+        console.log(`Employee's role updated successfully.`);
+        menuList();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    });
 }
 
 const options = (response) => {
