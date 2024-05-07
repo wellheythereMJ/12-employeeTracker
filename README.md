@@ -4,6 +4,6 @@ This command-line application empowers you to effortlessly manage your company's
 
 Organize departments, roles, and employees, enhancing your business planning and execution.
 
-View the code repository on Github [here](https://github.com/wellheythereMJ/employeeTracker).
+View the code repository on Github [here](https://github.com/wellheythereMJ/12-employeeTracker).
 
 ![employeeTracker demo video]()
