@@ -6,4 +6,4 @@ Organize departments, roles, and employees, enhancing your business planning and
 
 View the code repository on Github [here](https://github.com/wellheythereMJ/12-employeeTracker).
 
-![employeeTracker demo video]()
+Walkthrough video below:
